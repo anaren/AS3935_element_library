@@ -109,32 +109,33 @@
 #define AS3935_LDLUT41_REG_ADDR		  0X31
 #define AS3935_LDLUT42_REG_ADDR		  0X32
 
-
-#define TMP006_CONFIG_REG_RST       0x8000
-#define TMP006_CONFIG_REG_MOD       0x7000
-#define TMP006_CONFIG_REG_MOD3      0x4000
-#define TMP006_CONFIG_REG_MOD2      0x2000
-#define TMP006_CONFIG_REG_MOD1      0x1000
-#define TMP006_CONFIG_REG_CR        0x0E00
-#define TMP006_CONFIG_REG_CR3       0x0800
-#define TMP006_CONFIG_REG_CR2       0x0400
-#define TMP006_CONFIG_REG_CR1       0x0200
-#define TMP006_CONFIG_REG_EN        0x0100
-#define TMP006_CONFIG_REG_DRDY      0x0080
 //
 /**
- *  eTMP006Mode - type indicating the operating mode of the TMP006 device.  The
- *  TMP006 offers two modes, Power-Down and Continuous Conversion.  When
+ *  eAS3935Mode - type indicating the operating mode of the AS3935 device.  The
+ *  AS3935 offers three modes: Power Down, Listening, and Signal Verification.  When
  *  ultra-low power consumption is important, the application should place the
- *  device in Power-Down when temperature measurements are not required.  While
- *  in Continuous Conversion mode, the device automatically enters a low-power
- *  state between samples.  However, this low-power state draws significantly
- *  more current than when in Power-Down (240uA compared to 0.5uA typ).
+ *  device in Power Down Mode when lightning measurements are not needed.
+ *
+ *  In Listening Mode the Analog Front End (AFE), noise floor level generation,
+ *  the bias block, the TRCO, and the voltage regulator (if enabled) are running.
+ *	In this mode the system can push down the power consumption to a minimum,
+ *	(60µA). In case the maximum voltage supply does not exceed 3.6V,
+ *	it is possible to switch off the voltage regulator to save power.
+ *
+ *  The AS3935 enters Signal Verification Mode when the watchdog detects activity
+ *  picked up by the antenna. The IC will leave this mode either if the incoming signal
+ *  is classified as a disturber or if the analysis of the single event (lightning)
+ *  is finished. If the received signal is classified as a disturber, then the AS3935
+ *  will automatically go back to listening mode without any needed action from outside
+ *  and an interrupt will be generated. If the received pattern matches all requirements,
+ *  the energy calculation is performed and the AS3935 provides distance estimation.
+ *
  */
-enum eTMP006Mode
+enum eAS3935Mode
 {
   PowerDown             = 0x0000,
-  ContinuousConversion  = 0x7000
+  Listening				= 0x0001,
+  SignalVerification    = 0x7000
 };
 
 /**
@@ -155,15 +156,14 @@ enum eTMP006Rate
 
 
 /**
-Write a 16-bit value to a device register.  All of the TMP006 registers are
-read-only except for the Configuration Register.  This function does not do any
+Write a 16-bit value to a device register.  This function does not do any
 form of error checking, so trying to write to one of the read-only registers may
 result in undesireable behavior.
 @param id device ID (0 to 7) on i2c bus
 @param addr device register address
 @param data data to be written to the specified register address
 */
-void TMP006_WriteReg(uint8_t id, uint8_t addr, uint16_t data);
+void AS3935_WriteReg(uint8_t id, uint8_t addr, uint16_t data);
 
 /**
 Read a 16-bit value from a device register.
