@@ -53,7 +53,8 @@
  *  Defines, enumerations, and structure definitions
  */
 
-//#define TMP006_SLAVE_BASE_ADDR      0x40
+//The MOD-1016 Board uses I2C Address 0x03 since both SD0 and SD1 pins are pulled high.
+#define AS3935_I2C_BASE_ADDR      	  0x03
 
 #define AS3935_PWD_AFEGB_REG_ADDR     0x00
 #define AS3935_NFLV_WDTH_REG_ADDR     0x01
@@ -109,7 +110,14 @@
 #define AS3935_LDLUT41_REG_ADDR		  0X31
 #define AS3935_LDLUT42_REG_ADDR		  0X32
 
-//
+/**
+ * It is possible to send direct commands writing 0x96 to the registers
+ * REG0x3C and REG0x3D.
+ */
+#define AS3935_PRESET_DEF_REG_ADDR    0x3C
+#define AS3935_CALIBR_RCO_REG_ADDR	  0x3D
+
+
 /**
  *  eAS3935Mode - type indicating the operating mode of the AS3935 device.  The
  *  AS3935 offers three modes: Power Down, Listening, and Signal Verification.  When
@@ -133,27 +141,10 @@
  */
 enum eAS3935Mode
 {
-  PowerDown             = 0x0000,
-  Listening				= 0x0001,
-  SignalVerification    = 0x7000
+  AS3935_PowerDown             = 0x0000,
+  AS3935_Listening			   = 0x0001,
+  AS3935_SignalVerification    = 0x7000
 };
-
-/**
- *  eTMP006Rate - type indicating the number of conversions per second performed
- *  by the TMP006.  Slower conversion rates result in more accurate measuremnts
- *  compared to the higher rates.  The default is one conversion every second.
- *  See the TMP006 datasheet for more information regarding the effect
- *  conversion rate has on accuracy of the result.
- */
-enum eTMP006Rate
-{
-  FourConvPerSecond     = 0x0000,
-  TwoConvPerSecond      = 0x0200,
-  OneConvPerSecond      = 0x0400,
-  HalfConvPerSecond     = 0x0600,
-  QuarterConvPerSecond  = 0x0800
-};
-
 
 /**
 Write a 16-bit value to a device register.  This function does not do any
@@ -171,7 +162,7 @@ Read a 16-bit value from a device register.
 @param addr device register address
 @return data read from the specified register address
 */
-uint16_t TMP006_ReadReg(uint8_t id, uint8_t addr);
+uint16_t AS3935_ReadReg(uint8_t id, uint8_t addr);
 
 /**
 Issue a software reset to the sensor.
@@ -179,7 +170,7 @@ Issue a software reset to the sensor.
 @note This is a self-clearing operation.  There is no need for software to clear
 the reset condition.
 */
-void TMP006_SoftwareReset(uint8_t id);
+void AS3935_SoftwareReset(uint8_t id);
 
 /**
 Select the device operating mode.  Refer to eTMP006Mode definition for details
@@ -187,7 +178,7 @@ regarding the allowed states.
 @param id device ID (0 to 7) on i2c bus
 @param mode specifies the device mode of operation
 */
-void TMP006_SetOperatingMode(uint8_t id, enum eTMP006Mode mode);
+void AS3935_SetOperatingMode(uint8_t id, enum eAS3935Mode mode);
 
 /**
 Read the currently selected operating mode.  Refer to eTMP006Mode definition for
@@ -195,106 +186,4 @@ details regarding the available states.
 @param id device ID (0 to 7) on i2c bus
 @return device mode of operation
 */
-enum eTMP006Mode TMP006_GetOperatingMode(uint8_t id);
-
-/**
-Select the device conversion rate.  Refer to eTMP006Rate definition for details
-regarding the allowed rates.
-@param id device ID (0 to 7) on i2c bus
-@param rate specifies the conversion rate
-*/
-void TMP006_SetConversionRate(uint8_t id, enum eTMP006Rate rate);
-
-/**
-Read the currently selected conversion rate.  Refer to eTMP006Rate definition
-for details regarding the available rates.
-@param id device ID (0 to 7) on i2c bus
-@return device conversion rate
-*/
-enum eTMP006Rate TMP006_GetConversionRate(uint8_t id);
-
-/**
-Enable/disable the device DRDY output pin.
-@param id device ID (0 to 7) on i2c bus
-@param en true enables the pin output, false disables the output
-*/
-void TMP006_SetDataReadyEnable(uint8_t id, bool en);
-
-/**
-Read the state of the DRDY enable bit in the Configuration register.
-@param id device ID (0 to 7) on i2c bus
-@return true when the DRDY is enabled, otherwise false
-*/
-bool TMP006_GetDataReadyEnable(uint8_t id);
-
-/**
-Clear the DRDY ready status bit in the Configuration register.
-@param id device ID (0 to 7) on i2c bus
-*/
-void TMP006_ClearDataReadyStatus(uint8_t id);
-
-/**
-Read the state of the DRDY status bit in the Configuration register.  The DRDY
-status bit is automatically cleared after reading either the device Temperature
-register or Sensor Voltage register.  The TMP006GetAmbientTemperature() and
-TMP006GetObjectTemperature() functions access these registers, so calling either
-will clear the DRDY status bit.  The DRDY status bit can also be cleared by
-writing to the Configuration register or calling TMP006ClearDataReadyStatus().
-@param id device ID (0 to 7) on i2c bus
-@return true when conversion results are ready to read, otherwise false
-*/
-bool TMP006_GetDataReadyStatus(uint8_t id);
-
-/**
-Read the ambient (die) temperature.  When set to Continuous Conversion mode, the
-device periodically performs temperature conversions at a predefined rate.  This
-function calculates the temperature using only the most recent conversion value.
-@param id device ID (0 to 7) on i2c bus
-@return temperature of the TMP006 die in Celsius
-*/
-float TMP006_GetAmbientTemperature(uint8_t id);
-
-/**
-Read the temperature of an object.  When set to Continuous Conversion mode, the
-device periodically performs temperature conversions at a predefined rate.  This
-function calulates the object temperature using only the most recent conversion
-values for die temperature and sensor voltage.
-@param id device ID (0 to 7) on i2c bus
-@return temperature of an object in Celsius
-*/
-float TMP006_GetObjectTemperature(uint8_t id);
-
-/**
-Read the temperature of an object.  When set to Continuous Conversion mode, the
-device periodically performs temperature conversions at a predefined rate.  This
-function calulates the object temperature using the most recent conversion value
-for sensor voltage as well as the four most recent conversion values for die
-temperature. This function assumes the size of tDie buffer is 4 float values and
-that the application does not modify any of these values.  The application is
-responsible only for providing the memory location.  The reason for this
-approach, as opposed to defining the buffer in the driver itself, is so the
-application can control which sensors on the bus use the transient correction
-technique.  If not all sensors on the i2c bus use this method, then memory
-utilization is reduced.
-@param id device ID (0 to 7) on i2c bus
-@param tDie pointer to array of 4 tDie values
-@return temperature of an object in Celsius
-*/
-float TMP006_GetObjectTemperatureWithTransientCorrection(uint8_t id, float *tDie);
-
-/**
-Read the Manufacturer ID register.
-@param id device ID (0 to 7) on i2c bus
-@return contents of the Manufacturer ID register.  Value always = 0x5449.
-*/
-uint16_t TMP006_GetMfgId(uint8_t id);
-
-/**
-Read the Device ID register.
-@param id device ID (0 to 7) on i2c bus
-@return contents of the Device ID register.  Value always = 0x0067.
-*/
-uint16_t TMP006_GetDeviceId(uint8_t id);
-
-
-#endif  /* TMP006_H */
+enum eAS3935Mode AS3935_GetOperatingMode(uint8_t id);/
