@@ -44,7 +44,6 @@
 /**
  *  Global data
  */
-
 // -----------------------------------------------------------------------------
 /**
  *  Private interface
@@ -129,87 +128,4 @@ void AS3935_SetOperatingMode(uint8_t id, enum eAS3935Mode mode)
 enum eAS3935Mode AS3935_GetOperatingMode(uint8_t id)
 {
   return (enum eAS3935Mode)(AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR) & AS3935_CONFIG_REG_MOD);
-}
-
-void AS3935_SetConversionRate(uint8_t id, enum eAS3935Rate rate)
-{
-  uint16_t data = AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR);
-
-  data &= ~AS3935_CONFIG_REG_CR;
-  data |= (uint16_t)rate;
-  AS3935_WriteReg(id, AS3935_CONFIG_REG_ADDR, data);
-}
-
-enum eAS3935Rate AS3935_GetConversionRate(uint8_t id)
-{
-  return (enum eAS3935Rate)(AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR) & AS3935_CONFIG_REG_CR);
-}
-
-void AS3935_SetDataReadyEnable(uint8_t id, bool en)
-{
-  uint16_t data = AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR);
-
-  data &= ~AS3935_CONFIG_REG_EN;
-  if (en) data |= AS3935_CONFIG_REG_EN;
-  AS3935_WriteReg(id, AS3935_CONFIG_REG_ADDR, data);
-}
-
-bool AS3935_GetDataReadyEnable(uint8_t id)
-{
-  return (AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR) & AS3935_CONFIG_REG_EN) ? true : false;
-}
-
-void AS3935_ClearDataReadyStatus(uint8_t id)
-{
-  uint16_t data = AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR);
-
-  data &= ~AS3935_CONFIG_REG_DRDY;
-  AS3935_WriteReg(id, AS3935_CONFIG_REG_ADDR, data);
-}
-
-bool AS3935_GetDataReadyStatus(uint8_t id)
-{
-  return (AS3935_ReadReg(id, AS3935_CONFIG_REG_ADDR) & AS3935_CONFIG_REG_DRDY) ? true : false;
-}
-
-float AS3935_GetAmbientTemperature(uint8_t id)
-{
-  int16_t tDieRaw = (int16_t)AS3935_ReadReg(id, AS3935_TAMBIENT_REG_ADDR);
-
-  return (((float)(tDieRaw >> 2)) * (float)0.03125);
-}
-
-float AS3935_GetObjectTemperature(uint8_t id)
-{
-  float tDie = AS3935_GetAmbientTemperature(id) + (float)273.15;
-  int16_t vObjRaw = (int16_t)AS3935_ReadReg(id, AS3935_VOBJECT_REG_ADDR);
-  float vObj = ((float)(vObjRaw)) * (float)156.25E-9;
-
-  return AS3935_CalculateTemperature(&tDie, &vObj);
-}
-
-float AS3935_GetObjectTemperatureWithTransientCorrection(uint8_t id, float *tDie)
-{
-  int16_t vObjRaw = (int16_t)AS3935_ReadReg(id, AS3935_VOBJECT_REG_ADDR);
-  float tSlope;
-  float vObjCorr;
-
-  tDie[0] = tDie[1];
-  tDie[1] = tDie[2];
-  tDie[2] = tDie[3];
-  tDie[3] = AS3935_GetAmbientTemperature(id) + (float)273.15;
-  tSlope = (tDie[0] != 0.0) ? -((float)0.3*tDie[0])-((float)0.1*tDie[1])+((float)0.1*tDie[2])+((float)0.3*tDie[3]) : 0.0;
-  vObjCorr = (((float)(vObjRaw)) * (float)156.25E-9) + (tSlope * (float)2.96E-4);
-
-  return AS3935_CalculateTemperature(&tDie[3], &vObjCorr);
-}
-
-uint16_t AS3935_GetMfgId(uint8_t id)
-{
-  return AS3935_ReadReg(id, AS3935_MFG_ID_REG_ADDR);
-}
-
-uint16_t AS3935_GetDeviceId(uint8_t id)
-{
-  return AS3935_ReadReg(id, AS3935_DEVICE_ID_REG_ADDR);
 }
