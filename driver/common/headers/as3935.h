@@ -174,7 +174,7 @@ the reset condition.
 void AS3935_SoftwareReset(uint8_t id);
 
 /**
-Select the device operating mode.  Refer to eTMP006Mode definition for details
+Select the device operating mode.  Refer to eAS3935Mode definition for details
 regarding the allowed states.
 @param id device ID (0 to 7) on i2c bus
 @param mode specifies the device mode of operation
@@ -182,9 +182,9 @@ regarding the allowed states.
 void AS3935_SetOperatingMode(uint8_t id, enum eAS3935Mode mode);
 
 /**
-Read the currently selected operating mode.  Refer to eTMP006Mode definition for
+Read the currently selected operating mode.  Refer to eAS3935Mode definition for
 details regarding the available states.
 @param id device ID (0 to 7) on i2c bus
 @return device mode of operation
 */
-enum eAS3935Mode AS3935_GetOperatingMode(uint8_t id);/
+enum eAS3935Mode AS3935_GetOperatingMode(uint8_t id);
