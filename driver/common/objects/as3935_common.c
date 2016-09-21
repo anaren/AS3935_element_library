@@ -79,10 +79,11 @@ uint8_t AS3935_GetDistanceEstimation(uint8_t id)
 
 void AS3935_CalibrateRCO(uint8_t id)
 {
-  AS3935_WriteReg(id, AS3935_CALIBR_RCO_REG_ADDR, 0x96);
+  AS3935_WriteReg(id, AS3935_CALIBR_RCO_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
 }
 
 void AS3935_PresetRegisterDefaults(uint8_t id)
 {
-  AS3935_WriteReg(id, AS3935_PRESET_DEF_REG_ADDR, 0x96);
+  AS3935_WriteReg(id, AS3935_PRESET_DEF_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
 }
+
