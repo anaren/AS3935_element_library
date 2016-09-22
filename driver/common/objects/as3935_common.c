@@ -87,3 +87,21 @@ void AS3935_PresetRegisterDefaults(uint8_t id)
   AS3935_WriteReg(id, AS3935_PRESET_DEF_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
 }
 
+void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
+{
+  uint8_t currentAFESetting;
+  uint8_t newAFESetting;
+  uint8_t currentAFESetting = AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
+  currentAFESetting = currentAFESetting & AFE_MASK;
+  if (mode == AFE_OUTDOOR)
+	  newAFESetting = currentAFESetting & AFE_OUTDOOR;
+  	  AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
+  if (mode == AFE_INDOOR)
+	  newAFESetting = currentAFESetting & AFE_OUTDOOR;
+  	  AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
+}
+
+uint8_t AS3935_GetAnalogFrontEnd(uint8_t id)
+{
+  return AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
+}

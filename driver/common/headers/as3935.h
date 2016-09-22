@@ -120,6 +120,15 @@
 
 
 /**
+ * MASKS and other values.
+ *
+ *
+ */
+#define AFE_MASK	0b11000001
+#define AFE_OUTDOOR	0b00100100
+#define AFE_INDOOR	0b00011100
+
+/**
  *  eAS3935Mode - type indicating the operating mode of the AS3935 device.  The
  *  AS3935 offers three modes: Power Down, Listening, and Signal Verification.  When
  *  ultra-low power consumption is important, the application should place the
