@@ -1,17 +1,17 @@
 {
     "author": "Anaren Inc.",
+    "categories": [
+        "Lightning",
+        "Sensor"
+    ],
     "code": {
         "connected": "",
         "global": "",
         "interval": "",
         "setup": ""
     },
-    "description": "What if you need to know when the approaching storm is going to be overhead?\n The MOD-1016, based on the AS3935 from AMS, can detect storm front up to 40km away.\n Trigger interrupts on your microcontroller to let you know about wearther events and changes in storm distance,\n you can even tell as storm fronts move closer and move further away.",
+    "description": "What if you need to know when the approaching storm is going to be overhead?\n The MOD-1016, based on the AS3935 from AMS, can detect storm front up to 40km away.\n Trigger interrupts on your microcontroller to let you know about weather events and changes in storm distance,\n you can even tell as storm fronts move closer or further away.",
     "elements": {
-        "categories": [
-            "Lightning",
-            "Sensor"
-        ],
         "lightningDistance": {
             "code": "",
             "icon": null,
@@ -22,12 +22,7 @@
                     "label": "Lightning Distance"
                 }
             },
-            "returnType": "float"
-        },
-        "links": {
-            "Datasheet": "http://www.embeddedadventures.com/datasheets/AS3935_Datasheet_EN_v2.pdf",
-            "Product Page": "http://www.embeddedadventures.com/as3935_lightning_sensor_module_mod-1016.html",
-            "Wiki Page": "https://atmosphere.anaren.com/wiki/AS3935_Driver"
+            "returnType": "int"
         }
     },
     "files": {
@@ -48,6 +43,11 @@
         "en": {
             "label": "AS3935 Driver"
         }
+    },
+    "links": {
+        "Datasheet": "http://www.embeddedadventures.com/datasheets/AS3935_Datasheet_EN_v2.pdf",
+        "Product Page": "http://www.embeddedadventures.com/as3935_lightning_sensor_module_mod-1016.html",
+        "Wiki Page": "https://atmosphere.anaren.com/wiki/AS3935_Driver"
     },
     "manufacturer": "Embedded Adventures",
     "name": "as3935",

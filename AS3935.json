@@ -1,43 +1,42 @@
 {
-	"type": "Embedded Library",
-	"label": "AS3935 Driver",
-	"language": {
-		"en": {
-			"label": "AS3935 Driver"
-		}
-	},
-	"name": "as3935",
-	"author": "Anaren Inc.",
-	"manufacturer":"Embedded Adventures",
-	"description":"What if you need to know when the approaching storm is going to be overhead?\n The MOD-1016, based on the AS3935 from AMS, can detect storm front up to 40km away.\n Trigger interrupts on your microcontroller to let you know about wearther events and changes in storm distance,\n you can even tell as storm fronts move closer and move further away.",
-	"signature": "",
-	"version": "1.0.0",
-	
-	"code": {
-		"global" : "",
-		"setup" : "" 
-	},
-	
-	"elements": {
-		"lightningDistance": {
-			"label": "Lightning Distance",
-			"language": {
-				"en": {
-					"label": "Lightning Distance"
-				}
-			},
-			"returnType":"float",
-			"inputType":"void",
-			"icon": null,
-			"code": ""
-		},
-	
-	"categories":["Lightning", "Sensor"],
-	
-	"links":{
-		"Product Page":"http://www.embeddedadventures.com/as3935_lightning_sensor_module_mod-1016.html",
-		"Datasheet":"http://www.embeddedadventures.com/datasheets/AS3935_Datasheet_EN_v2.pdf",
-		"Wiki Page":"https://atmosphere.anaren.com/wiki/AS3935_Driver"
-	}
+  "type": "Embedded Library",
+  "label": "AS3935 Driver",
+  "language": {
+    "en": {
+      "label": "AS3935 Driver"
+    }
+  },
+  "name": "as3935",
+  "author": "Anaren Inc.",
+  "manufacturer": "Embedded Adventures",
+  "description": "What if you need to know when the approaching storm is going to be overhead?\n The MOD-1016, based on the AS3935 from AMS, can detect storm front up to 40km away.\n Trigger interrupts on your microcontroller to let you know about weather events and changes in storm distance,\n you can even tell as storm fronts move closer or further away.",
+  "signature": "",
+  "version": "1.0.0",
+  "code": {
+    "global": "",
+    "setup": ""
+  },
+  "elements": {
+    "lightningDistance": {
+      "label": "Lightning Distance",
+      "language": {
+        "en": {
+          "label": "Lightning Distance"
+        }
+      },
+      "returnType": "int",
+      "inputType": "void",
+      "icon": null,
+      "code": ""
+    }
+  },
+  "categories": [
+    "Lightning",
+    "Sensor"
+  ],
+  "links": {
+    "Product Page": "http://www.embeddedadventures.com/as3935_lightning_sensor_module_mod-1016.html",
+    "Datasheet": "http://www.embeddedadventures.com/datasheets/AS3935_Datasheet_EN_v2.pdf",
+    "Wiki Page": "https://atmosphere.anaren.com/wiki/AS3935_Driver"
   }
 }
