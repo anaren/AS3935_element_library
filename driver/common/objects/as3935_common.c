@@ -56,6 +56,7 @@
  *  Public interface
  */
 
+//Write to specified register on the AS3935
 void AS3935_WriteReg(uint8_t id, uint8_t addr, uint8_t data)
 {
   uint8_t writeBytes[2];
@@ -64,6 +65,7 @@ void AS3935_WriteReg(uint8_t id, uint8_t addr, uint8_t data)
   AIR_I2C_WRITE(AS3935_I2C_BASE_ADDR + id, writeBytes, 2);
 }
 
+//Read data from specified register
 uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr)
 {
   uint8_t writeBytes[1] = {0};
@@ -72,21 +74,31 @@ uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr)
   return readBytes[0];
 }
 
+/**
+ * Get the estimated distance to the lightning storm in kilometers.
+ * Values beyond 40 are out of range.
+ * Values less than 5 mean that the storm is overhead
+*/
 uint8_t AS3935_GetDistanceEstimation(uint8_t id)
 {
   return AS3935_ReadReg(id, AS3935_DIST_ESTI_REG_ADDR);
 }
-
+//Calibrate the RC Oscilators automatically.
 void AS3935_CalibrateRCO(uint8_t id)
 {
   AS3935_WriteReg(id, AS3935_CALIBR_RCO_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
 }
 
+//Sets all registers in default mode
 void AS3935_PresetRegisterDefaults(uint8_t id)
 {
   AS3935_WriteReg(id, AS3935_PRESET_DEF_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
 }
 
+/*
+ * Set the analog front end and watchdog operating mode.
+ * Refer to as3935.h for possible operating modes.
+ */
 void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
 {
   uint8_t currentAFESetting;
@@ -101,7 +113,11 @@ void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
   	  AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
 }
 
+/**
+ * Retrieve the current operating mode of the AFE and watchdog.
+ */
 uint8_t AS3935_GetAnalogFrontEnd(uint8_t id)
 {
   return AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
 }
+

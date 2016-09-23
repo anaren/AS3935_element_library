@@ -19,11 +19,11 @@
 	},
 	
 	"elements": {
-		"objectTemperature": {
-			"label": "Object Temperature",
+		"lightningDistance": {
+			"label": "Lightning Distance",
 			"language": {
 				"en": {
-					"label": "Object Temperature"
+					"label": "Lightning Distance"
 				}
 			},
 			"returnType":"float",
@@ -31,27 +31,13 @@
 			"icon": null,
 			"code": ""
 		},
-		
-		"ambientTemperature": {
-			"label": "Ambient Temperature",
-			"language": {
-				"en": {
-					"label": "Ambient Temperature"
-				}
-			},
-			"returnType":"float",
-			"inputType":"void",
-			"icon": null,
-			"code": ""
-		}
-	},
 	
-	"categories":["tbd", "tbd"],
-	
+	"categories":["Lightning", "Sensor"],
 	
 	"links":{
 		"Product Page":"http://www.embeddedadventures.com/as3935_lightning_sensor_module_mod-1016.html",
 		"Datasheet":"http://www.embeddedadventures.com/datasheets/AS3935_Datasheet_EN_v2.pdf",
 		"Wiki Page":"https://atmosphere.anaren.com/wiki/AS3935_Driver"
 	}
+  }
 }
