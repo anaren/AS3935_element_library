@@ -79,9 +79,10 @@ uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr)
  * Values beyond 40 are out of range.
  * Values less than 5 mean that the storm is overhead
 */
-uint8_t AS3935_GetDistanceEstimation(uint8_t id)
+float AS3935_GetDistanceEstimation(uint8_t id)
 {
-  return AS3935_ReadReg(id, AS3935_DIST_ESTI_REG_ADDR);
+  uint8_t distanceEstimate = (uint8_t)AS3935_ReadReg(id, AS3935_DIST_ESTI_REG_ADDR);
+  return (float)distanceEstimate;
 }
 //Calibrate the RC Oscilators automatically.
 void AS3935_CalibrateRCO(uint8_t id)
@@ -101,7 +102,7 @@ void AS3935_PresetRegisterDefaults(uint8_t id)
  */
 void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
 {
-  uint8_t currentAFESetting;
+  //uint8_t currentAFESetting;
   uint8_t newAFESetting;
   uint8_t currentAFESetting = AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
   currentAFESetting = currentAFESetting & AFE_MASK;
@@ -119,5 +120,37 @@ void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
 uint8_t AS3935_GetAnalogFrontEnd(uint8_t id)
 {
   return AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
+}
+
+void AS3935_DisableDisturbers(uint8_t id)
+{
+  AS3935_WriteReg(id, AS3935_MASK_DIST_REG_ADDR, 1);
+}
+
+void AS3935_EnableDisturbers(uint8_t id)
+{
+  AS3935_WriteReg(id, AS3935_MASK_DIST_REG_ADDR, 0);
+}
+
+uint8_t AS3935_GetMinimumLightnings(uint8_t id)
+{
+  return AS3935_ReadReg(id, AS3935_MIN_LIGHT_REG_ADDR);
+}
+
+uint8_t AS3935_SetMinimumLightnings(uint8_t id, minimumLightning)
+{
+  AS3935_WriteReg(id, AS3935_MIN_LIGHT_REG_ADDR,minimumLightning);
+  return getMinimumLightnings();
+}
+
+uint8_t AS3935_GetNoiseFloor(uint8_t id)
+{
+  return AS3935_ReadReg(id, AS3935_NFLV_WDTH_REG_ADDR);
+}
+
+uint8_t AS3935_SetNoiseFloor(uint8_t id, int noiseFloor)
+{
+  AS3935_WriteReg(id, AS3935_NFLV_WDTH_REG_ADDR, noiseFloor);
+  return AS3935_GetNoiseFloor(id);
 }
 

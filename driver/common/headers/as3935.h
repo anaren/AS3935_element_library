@@ -164,15 +164,15 @@ result in undesireable behavior.
 @param addr device register address
 @param data data to be written to the specified register address
 */
-void AS3935_WriteReg(uint8_t id, uint8_t addr, uint16_t data);
-
+void AS3935_WriteReg(uint8_t id, uint8_t addr, uint8_t data);
+//MAY HAVE TO CHANGE BACK DATA TO UINT16_T
 /**
 Read a 16-bit value from a device register.
 @param id device ID (0 to 7) on i2c bus
 @param addr device register address
 @return data read from the specified register address
 */
-uint16_t AS3935_ReadReg(uint8_t id, uint8_t addr);
+uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr);
 
 /**
 Issue a software reset to the sensor.
@@ -197,3 +197,5 @@ details regarding the available states.
 @return device mode of operation
 */
 enum eAS3935Mode AS3935_GetOperatingMode(uint8_t id);
+
+#endif
