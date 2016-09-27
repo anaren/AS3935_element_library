@@ -79,10 +79,10 @@ uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr)
  * Values beyond 40 are out of range.
  * Values less than 5 mean that the storm is overhead
 */
-float AS3935_GetDistanceEstimation(uint8_t id)
+int AS3935_GetDistanceEstimation(uint8_t id)
 {
   uint8_t distanceEstimate = (uint8_t)AS3935_ReadReg(id, AS3935_DIST_ESTI_REG_ADDR);
-  return (float)distanceEstimate;
+  return (int)distanceEstimate;
 }
 //Calibrate the RC Oscilators automatically.
 void AS3935_CalibrateRCO(uint8_t id)

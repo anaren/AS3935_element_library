@@ -24,7 +24,7 @@
           "label": "Detect Lightning"
         }
       },
-      "returnType": "float",
+      "returnType": "int",
       "inputType": "void",
       "icon": null,
       "code": ""

@@ -166,14 +166,14 @@ result in undesirable behavior.
 void AS3935_WriteReg(uint8_t id, uint8_t addr, uint8_t data);
 //MAY HAVE TO CHANGE BACK DATA TO UINT16_T
 /**
-Read a 16-bit value from a device register.
+Read a 8-bit value from a device register.
 @param id device ID (0 to 7) on i2c bus
 @param addr device register address
 @return data read from the specified register address
 */
 uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr);
 
-float AS3935_GetDistanceEstimation(uint8_t id);
+int AS3935_GetDistanceEstimation(uint8_t id);
 
 void AS3935_CalibrateRCO(uint8_t id);
 
