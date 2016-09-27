@@ -137,9 +137,9 @@ uint8_t AS3935_GetMinimumLightnings(uint8_t id)
   return AS3935_ReadReg(id, AS3935_MIN_LIGHT_REG_ADDR);
 }
 
-uint8_t AS3935_SetMinimumLightnings(uint8_t id, minimumLightning)
+uint8_t AS3935_SetMinimumLightnings(uint8_t id, uint8_t minimumLightning)
 {
-  AS3935_WriteReg(id, AS3935_MIN_LIGHT_REG_ADDR,minimumLightning);
+  AS3935_WriteReg(id, AS3935_MIN_LIGHT_REG_ADDR, minimumLightning);
   return getMinimumLightnings();
 }
 

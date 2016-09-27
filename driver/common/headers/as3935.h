@@ -189,7 +189,7 @@ void AS3935_EnableDisturbers(uint8_t id);
 
 uint8_t AS3935_GetMinimumLightnings(uint8_t id);
 
-uint8_t AS3935_SetMinimumLightnings(uint8_t id, minimumLightning);
+uint8_t AS3935_SetMinimumLightnings(uint8_t id, uint8_t minimumLightning);
 
 uint8_t AS3935_GetNoiseFloor(uint8_t id);
 
