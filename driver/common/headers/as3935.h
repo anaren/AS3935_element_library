@@ -122,7 +122,6 @@
 /**
  * MASKS and other values.
  *
- *
  */
 #define AFE_MASK	0b11000001
 #define AFE_OUTDOOR	0b00100100
@@ -157,9 +156,9 @@ enum eAS3935Mode
 };
 
 /**
-Write a 16-bit value to a device register.  This function does not do any
+Write a 8-bit value to a device register.  This function does not do any
 form of error checking, so trying to write to one of the read-only registers may
-result in undesireable behavior.
+result in undesirable behavior.
 @param id device ID (0 to 7) on i2c bus
 @param addr device register address
 @param data data to be written to the specified register address
@@ -174,28 +173,27 @@ Read a 16-bit value from a device register.
 */
 uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr);
 
-/**
-Issue a software reset to the sensor.
-@param id device ID (0 to 7) on i2c bus
-@note This is a self-clearing operation.  There is no need for software to clear
-the reset condition.
-*/
-void AS3935_SoftwareReset(uint8_t id);
+float AS3935_GetDistanceEstimation(uint8_t id);
 
-/**
-Select the device operating mode.  Refer to eAS3935Mode definition for details
-regarding the allowed states.
-@param id device ID (0 to 7) on i2c bus
-@param mode specifies the device mode of operation
-*/
-void AS3935_SetOperatingMode(uint8_t id, enum eAS3935Mode mode);
+void AS3935_CalibrateRCO(uint8_t id);
 
-/**
-Read the currently selected operating mode.  Refer to eAS3935Mode definition for
-details regarding the available states.
-@param id device ID (0 to 7) on i2c bus
-@return device mode of operation
-*/
-enum eAS3935Mode AS3935_GetOperatingMode(uint8_t id);
+void AS3935_PresetRegisterDefaults(uint8_t id);
+
+void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode);
+
+uint8_t AS3935_GetAnalogFrontEnd(uint8_t id);
+
+void AS3935_DisableDisturbers(uint8_t id);
+
+void AS3935_EnableDisturbers(uint8_t id);
+
+uint8_t AS3935_GetMinimumLightnings(uint8_t id);
+
+uint8_t AS3935_SetMinimumLightnings(uint8_t id, minimumLightning);
+
+uint8_t AS3935_GetNoiseFloor(uint8_t id);
+
+uint8_t AS3935_SetNoiseFloor(uint8_t id, int noiseFloor);
+
 
 #endif
