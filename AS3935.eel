@@ -12,17 +12,17 @@
     },
     "description": "What if you need to know when the approaching storm is going to be overhead?\n The MOD-1016, based on the AS3935 from AMS, can detect storm front up to 40km away.\n Trigger interrupts on your microcontroller to let you know about weather events and changes in storm distance,\n you can even tell as storm fronts move closer or further away.",
     "elements": {
-        "lightningDistance": {
-            "code": "",
-            "icon": null,
+        "detectLightning": {
+            "code": "    float value;\n    \n    /**\n    Detect oncoming lightning storm fronts up to 40km away.\n    @param id device ID (0 to 7) on i2c bus\n    @return Estimated distance of oncoming storm front in km.\n    */\n    value = AS3935_GetDistanceEstimation(0);\n    \n    return value; \n",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA9CAYAAAEsZPz9AAAACXBIWXMAAAsSAAALEgHS3X78AAAH\niUlEQVR42u1cP0wbVxj/XYSSoWkwEhJDI3GhE0vsLK0UqeGowi2pFMOWIYpZWhhOOBKZOXdtpBpu\noRnKUQYygSs1yyVqbEWKlC6xszCVGqkZUCPFJGUIy+tw34Pn486+M3eOj94nIe7Pe/fe977/3/ue\nJSxNMASEM0EaM80K1ol3AIA+v52uPJxF9Z8/6W5pgjHG0O6Pt8PSBOsDAMlQqwAaAPIAigDGABSE\ngfJMs6SjW58jiSNKnSx54E5nIqMPAJRu6ME6ZB/p/lYLSxMmvxaRrgCoA5ABZABUiTYVpllKE7s0\nEyjkZe2IeH5JIBlqcFIEGWDn/W5nQuxraWj2w58OBZffIJjwgY4NEoTyLbBgACRRC0mGyvqEGwXA\nU6ZZkmSoZQB1plk5elcmvlyl57pkqDqABdIjCj2XWnJXGJh4YRcJC3dFTk5kh/xAPjMFpllNJij0\nQX78agYAMP3kfnSDcDC3IsKkemvZ1WKHOkhmfQa1N9tN6iWS5UoPjuDKw9louWvn/a7go3ToQbT5\nYw5bmsXSBDsTunA3Q+NQC5NyzJGhlsloA0CGaVaK2tSZZsmkaffI2VoBMAnA5O3aSfwdsvwm0yyF\nrqvC+2GaDOh5hrsiAPpbIxguTZz+jRIFTU6RFv5omIQB5an7xxSwqIT74oCEqNA5KBvz3Sf7iUzf\n9XuePmpsEEmdO487oxOuFGKahdyoGg/WevvthuvzvYN9pH6ajJ+wizIy8GAKjQ//xou1AKDx3SYA\nYLG2CclQXZHoedbKjaroP/uJq3C3RCSqKKvTyKz8ugZn7OloowB42rOsJRlqBsDAX3fWfC9snwuG\n4FgCGGeaVaYgWgGgUxIuywNungDi1+RXHlKXB+VCwF6mgJxDgXzQKm/HNKsahh9kAlika93xTgeQ\nlwy1Qcg1BT6SoRZ55ovaZGjiaMXCgvO8Ixlq48S+Vi/JiE8W7G0ZCQBy7LzfU+PGB9JavQrFa7PI\nDH7e0o2PBSJz6WYHkeeEYuVryReG2gZVsUDEGeICiKf3K+5UAMDq1uOPl+E4ifd77NmTH+Knfr28\nXrfYPbaW3Rmj9CwixWuznu+cmfJYxux3ny2jWN2In9bSv7zdZAjdkIgFIgtfHCGSWZ8JFFjFQrhj\nhUjphh2EDjyY6ijU7Rm4OXIVk490z1yWl/c7yTSr1CtIXFq9zVa3HqO0/bzANEv3YDfmhkijh+RB\nrt5aRmZ9ZtULibiwVjGzPlPjdR5xRkRmmpXpONQVk2uSodYB/Aw7gbYIe+PXBDBHzSugjV8hOadT\nVQxn0376lg4hCQeg4KieqVD/KoAU0yw5KOZuFJmkfFEZwC+EWB72rrXJEXXZXOaLoQDICjvbnMer\nQlmaczc7JRlqDnYWU+6EhG6I8EHqTLPqojIIkMqUBeq6Ceuc4z7t7BcGIitMs8oAcrRKhx4CT4m6\nDUZ5XVDfIuy6Ai/YcdzvMc0yffTz1nSC9ztOk4hTTMJiH1jF1mkMgogcZ0ROTe43kZGEtRLw7zMm\n0Dmkzp33LJ1xxIuov9s9/aL+scFt88MJd58ttyRGQpCwgvJrs0gPjrRs8+v2c88UaUKQEEH5LH1s\no9YJewf7dBQMCUGihtI37Rc6+5vu+3uJUT8JMW7o6D/7Scs2tTfbUC5ehnLxctPzxod9VxWWEKRD\nyGemcHPkatt26cGRY/ZlsbYJ/cVaIiFhgXxh6PBMXBCovdmGsjHfcp8nCQxDgtyoipXr857vxzfu\ngcqXExvSDYnxIsbq1mPP8p+EIF0MCvcO9iGbt31tQycECRHM6/eOVfZNP7nfdAovIUiXIDtyten8\nWuX1K9ei14QgXYDUufPYpDKfvYN9KBvzLgfSwyNIDfYmdzlZeodbam9tr3C7UfhjjccU07QV7ecb\nCuwt67RfgiTE8Aad11XSYc7VIMU+gF17IBlqHkdn1xKV1aF05OULQ8Plv19Bf7EWmBCJDYlAOurv\ndmv1d7sK06xI6gv7WnBDhvQcYBdh6UyzGrzkh+B3AF8L97zmiZe6VZlm5Unv5mAXSeYAlBwirNCY\nRbrPC/o6RxVo4nyKTLNKNBeTaZbJr+n7TZ4pPcvSH/8ebw/h2eH4jvHysGu95KgIwaFV+j0Fu0RP\np/u39H8MQJl+juV7Wkz+LM+JQe/zVC23Qothwi4VVJzEEAgp1i3KAMZocV5Sf744fC6yeO3ybZne\nmcK12JePYfLxyei+JILkac7lqIkRRGWVAMwJB6kXJENdANVTurQfo/qvCvfaCJlOa6FTAoFWSHrq\njrm0Ayexj4UVsH/DpwL7UDjvsylIWuTgd4Mqz70Dui9QTanu0b4i1JyWAKQlQ5UlQzVdDor7Ab74\nDQDjjncFn+e7swCGW7zPORiQjzveTSPV12YR+O/vlfjPB9AzXrhbJiIVcHTS3oRd36rDrq0tEjcX\naUGLLTiuqS//JtOsumSoA9Q3BWCA7Jk4rnMOh6km+kZVMtRJQUrE9iCbNC20vUTqug5goGuenEf6\nfTyJQyJ3oRW3OCTZU+8xSAjSa5LjobL4zxTWkyWKBGSyh/1+jXo/dy8TSFTW/xr+A9kjMBRoCZft\nAAAAAElFTkSuQmCC\n",
             "inputType": "void",
-            "label": "Lightning Distance",
+            "label": "Detect Lightning",
             "language": {
                 "en": {
-                    "label": "Lightning Distance"
+                    "label": "Detect Lightning"
                 }
             },
-            "returnType": "int"
+            "returnType": "float"
         }
     },
     "files": {

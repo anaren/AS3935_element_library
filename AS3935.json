@@ -17,14 +17,14 @@
     "setup": ""
   },
   "elements": {
-    "lightningDistance": {
-      "label": "Lightning Distance",
+    "detectLightning": {
+      "label": "Detect Lightning",
       "language": {
         "en": {
-          "label": "Lightning Distance"
+          "label": "Detect Lightning"
         }
       },
-      "returnType": "int",
+      "returnType": "float",
       "inputType": "void",
       "icon": null,
       "code": ""
