@@ -120,7 +120,7 @@
 
 
 /**
- * MASKS and other values.
+ * MASKS and other values. Analog Front End operating modes are defined here.
  *
  */
 #define AFE_MASK	0b11000001
@@ -173,26 +173,76 @@ Read a 8-bit value from a device register.
 */
 uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr);
 
+/**
+ * Get the estimated distance to the lightning storm in kilometers.
+ * Values beyond 40 are out of range.
+ * Values less than 5 mean that the storm is overhead
+ * @param id device ID (0 to 7) on i2c bus
+*/
 int AS3935_GetDistanceEstimation(uint8_t id);
 
+/**
+ * Calibrate the RC Oscillators automatically.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 void AS3935_CalibrateRCO(uint8_t id);
 
+/**
+ * Sets all registers to default mode.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 void AS3935_PresetRegisterDefaults(uint8_t id);
 
+/*
+ * Set the analog front end and watchdog operating mode.
+ * Refer above for possible operating modes.
+ * @param id device ID (0 to 7) on i2c bus
+ * @param mode Operating Mode for AFE, can be AFE_INDOOR or AFE_OUTDOOR.
+ */
 void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode);
 
+/**
+ * Retrieve the current operating mode of the AFE and watchdog.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 uint8_t AS3935_GetAnalogFrontEnd(uint8_t id);
 
+/**
+ * Disable the disturber detection feature on the AS3935.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 void AS3935_DisableDisturbers(uint8_t id);
 
+/**
+ * Enable the disturber detection feature on the AS3935.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 void AS3935_EnableDisturbers(uint8_t id);
 
+/**
+ * Get the defined minimum number of lightning events in the last 17 minutes that issue a lightning interrupt.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 uint8_t AS3935_GetMinimumLightnings(uint8_t id);
 
+/**
+ * Set the defined minimum number of lightning events in the last 17 minutes that issue a lightning interrupt.
+ * @param id device ID (0 to 7) on i2c bus
+ * @param minimumLightning (1 to 16)
+ */
 uint8_t AS3935_SetMinimumLightnings(uint8_t id, uint8_t minimumLightning);
 
+/**
+ * Get the defined threshold for the noise floor that triggers an interrupt.
+ * @param id device ID (0 to 7) on i2c bus
+ */
 uint8_t AS3935_GetNoiseFloor(uint8_t id);
 
+/**
+ * Set the defined threshold for the noise floor that triggers an interrupt.
+ * @param id device ID (0 to 7) on i2c bus
+ * @param noiseFloor (0b000 to 0b111)
+ */
 uint8_t AS3935_SetNoiseFloor(uint8_t id, int noiseFloor);
 
 
