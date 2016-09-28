@@ -123,9 +123,11 @@
  * MASKS and other values. Analog Front End operating modes are defined here.
  *
  */
-#define AFE_MASK	0b11000001
-#define AFE_OUTDOOR	0b00100100
-#define AFE_INDOOR	0b00011100
+#define AFE_MASK	 0b11000001
+#define AFE_OUTDOOR	 0b00100100
+#define AFE_INDOOR	 0b00011100
+#define INTRPT_MASK  0b11110000
+#define INTRPT_RESET 0b0000
 
 /**
  *  eAS3935Mode - type indicating the operating mode of the AS3935 device.  The
@@ -179,7 +181,7 @@ uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr);
  * Values less than 5 mean that the storm is overhead
  * @param id device ID (0 to 7) on i2c bus
 */
-int AS3935_GetDistanceEstimation(uint8_t id);
+uint8_t AS3935_GetDistanceEstimation(uint8_t id);
 
 /**
  * Calibrate the RC Oscillators automatically.
@@ -244,6 +246,18 @@ uint8_t AS3935_GetNoiseFloor(uint8_t id);
  * @param noiseFloor (0b000 to 0b111)
  */
 uint8_t AS3935_SetNoiseFloor(uint8_t id, int noiseFloor);
+
+/**
+ * Read the current state of the interrupt register.
+ * @param id device ID (0 to 7) on i2c bus
+ */
+uint8_t AS3935_ReadInterruptRegister(uint8_t id);
+
+/**
+* Reset the interrupt register.
+* @param id device ID (0 to 7) on i2c bus
+*/
+uint8_t AS3935_ResetInterruptRegister(uint8_t id);
 
 
 #endif

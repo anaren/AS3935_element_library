@@ -34,12 +34,6 @@
  */
 #include "as3935.h"
 
-#ifdef AIR_FLOATING_POINT_AVAILABLE
-#include <math.h>
-#else
-#include "../fp_math/fp_math.h"
-#endif
-
 // -----------------------------------------------------------------------------
 /**
  *  Global data
@@ -80,13 +74,15 @@ uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr)
 
 /**
  * Get the estimated distance to the lightning storm in kilometers.
+ * Also resets the contents of the Interrupt register.
  * Values beyond 40 are out of range.
- * Values less than 5 mean that the storm is overhead
+ * Values less than 5 mean that the storm is overhead.
  */
-int AS3935_GetDistanceEstimation(uint8_t id)
+uint8_t AS3935_GetDistanceEstimation(uint8_t id)
 {
   uint8_t distanceEstimate = (uint8_t)AS3935_ReadReg(id, AS3935_DIST_ESTI_REG_ADDR);
-  return (int)distanceEstimate;
+  //AS3935_ResetInterruptRegister(id);
+  return distanceEstimate;
 }
 
 /**
@@ -97,7 +93,7 @@ void AS3935_CalibrateRCO(uint8_t id)
   AS3935_WriteReg(id, AS3935_CALIBR_RCO_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
 }
 
-/*
+/**
  * Sets all registers in default mode
  */
 void AS3935_PresetRegisterDefaults(uint8_t id)
@@ -115,11 +111,16 @@ void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
   uint8_t currentAFESetting = AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
   currentAFESetting = currentAFESetting & AFE_MASK;
   if (mode == AFE_OUTDOOR)
-	  newAFESetting = currentAFESetting & AFE_OUTDOOR;
-  	  AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
+  {
+	newAFESetting = currentAFESetting & AFE_OUTDOOR;
+  	AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
+  }
+
   if (mode == AFE_INDOOR)
-	  newAFESetting = currentAFESetting & AFE_OUTDOOR;
-  	  AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
+  {
+	newAFESetting = currentAFESetting & AFE_OUTDOOR;
+  	AS3935_WriteReg(id, AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
+  }
 }
 
 /**
@@ -178,4 +179,24 @@ uint8_t AS3935_SetNoiseFloor(uint8_t id, int noiseFloor)
 {
   AS3935_WriteReg(id, AS3935_NFLV_WDTH_REG_ADDR, noiseFloor);
   return AS3935_GetNoiseFloor(id);
+}
+
+/**
+ * Read current state of the interrupt register.
+ */
+uint8_t AS3935_ReadInterruptRegister(uint8_t id)
+{
+  //ISSUE TIME DELAY HERE. e.g. delay(2ms)
+  return AS3935_ReadReg(id, AS3935_MASK_DIST_REG_ADDR);
+}
+
+/**
+ * Reset the interrupt register.
+ */
+void AS3935_ResetInterruptRegister(uint8_t id)
+{
+  uint8_t currentInterruptState = AS3935_ReadInterruptRegister(id);
+  uint8_t newInterruptState = currentInterruptState & INTRPT_MASK;
+  newInterruptState = newInterruptState | INTRPT_RESET;
+  AS3935_WriteReg(id, AS3935_MASK_DIST_REG_ADDR, newInterruptState);
 }
