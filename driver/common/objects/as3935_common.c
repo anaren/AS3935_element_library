@@ -58,7 +58,7 @@ void AS3935_WriteReg(uint8_t id, uint8_t addr, uint8_t data)
   uint8_t writeBytes[2];
   writeBytes[0] = addr;
   writeBytes[1] = data;
-  AIR_I2C_WRITE(AS3935_I2C_BASE_ADDR + id, writeBytes, 2);
+  AIR_I2C_Write(AS3935_I2C_BASE_ADDR + id, writeBytes, 2);
 }
 
 /**
@@ -81,8 +81,8 @@ uint8_t AS3935_ReadReg(uint8_t id, uint8_t addr)
 uint8_t AS3935_GetDistanceEstimation(uint8_t id)
 {
   uint8_t distanceEstimate = (uint8_t)AS3935_ReadReg(id, AS3935_DIST_ESTI_REG_ADDR);
-  //AS3935_ResetInterruptRegister(id);
-  return distanceEstimate;
+
+  return distanceEstimate & DISTEST_MASK;
 }
 
 /**
@@ -128,7 +128,7 @@ void AS3935_SetAnalogFrontEnd(uint8_t id, uint8_t mode)
  */
 uint8_t AS3935_GetAnalogFrontEnd(uint8_t id)
 {
-  return AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR);
+  return ((uint8_t)AS3935_ReadReg(id, AS3935_PWD_AFEGB_REG_ADDR) & AFE_MASK_2) >> 1;
 }
 
 /**
@@ -183,20 +183,11 @@ uint8_t AS3935_SetNoiseFloor(uint8_t id, int noiseFloor)
 
 /**
  * Read current state of the interrupt register.
+ * Issue a 2 millisecond delay per the datasheet recommendations.
  */
 uint8_t AS3935_ReadInterruptRegister(uint8_t id)
 {
-  //ISSUE TIME DELAY HERE. e.g. delay(2ms)
-  return AS3935_ReadReg(id, AS3935_MASK_DIST_REG_ADDR);
+  return (uint8_t)AS3935_ReadReg(id, AS3935_MASK_DIST_REG_ADDR);
 }
 
-/**
- * Reset the interrupt register.
- */
-void AS3935_ResetInterruptRegister(uint8_t id)
-{
-  uint8_t currentInterruptState = AS3935_ReadInterruptRegister(id);
-  uint8_t newInterruptState = currentInterruptState & INTRPT_MASK;
-  newInterruptState = newInterruptState | INTRPT_RESET;
-  AS3935_WriteReg(id, AS3935_MASK_DIST_REG_ADDR, newInterruptState);
-}
+
