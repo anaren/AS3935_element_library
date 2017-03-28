@@ -33,11 +33,19 @@
  *	- initial development, replace this line upon release.
  */
 #include "as3935.h"
+#include "../i2c/i2c.h"
+#include "../gpio/gpio.h"
+#include "../generic/generic.h"
+#include "../pin_mapping.h"
 
 // -----------------------------------------------------------------------------
 /**
  *	Global data
  */
+static int AS3935_freq = 0;
+static int AS3935_mode = 0;
+
+
 // -----------------------------------------------------------------------------
 /**
  *	Private interface
@@ -49,6 +57,16 @@
 /**
  *	Public interface
  */
+
+void AS3935_Init()
+{
+	AS3935_PresetRegisterDefaults();
+	AS3935_CalibrateRCO();
+	AS3935_SetAnalogFrontEnd(AIR_AS3935_ANALOG_FRONT_END);
+	AS3935_SetNoiseFloor((0x02<<4)|(0x02<<0));
+	AS3935_EnableDisturbers();
+	AS3935_CalibrateLCO();
+}
 
 /**
  * Write to specified register on the AS3935.
@@ -82,7 +100,7 @@ uint8_t AS3935_GetDistanceEstimation()
 {
 	uint8_t distanceEstimate = (uint8_t)AS3935_ReadReg(AS3935_DIST_ESTI_REG_ADDR);
 
-	return distanceEstimate & DISTEST_MASK;
+	return distanceEstimate & AS3935_DISTEST_MASK;
 }
 
 /**
@@ -91,6 +109,42 @@ uint8_t AS3935_GetDistanceEstimation()
 void AS3935_CalibrateRCO()
 {
 	AS3935_WriteReg(AS3935_CALIBR_RCO_REG_ADDR, AS3935_DIRECT_CMD_REG_VALU);
+}
+
+void AS3935_CalibrateLCOIRQHandler()
+{
+	if (AS3935_mode == 1) {
+		AS3935_freq++;
+	}
+}
+
+/**
+ *
+ */
+void AS3935_CalibrateLCO()
+{
+	int i, n, m = 10000, r = 0;
+	
+	AIR_GPIO_RegisterInterrupt(AS3935_IRQ_PIN, AS3935_CalibrateLCOIRQHandler, AIR_GPIO_TRIGGER_FALLING_EDGE);
+	for(i = 0; i < 0x10; i++)
+	{
+		AS3935_WriteReg(AS3935_DISP_IRQ_REG_ADDR, 0x80 | i);
+		AIR_GENERIC_UDelay(10000);
+		AS3935_freq = 0;
+		AS3935_mode = 1;
+		AIR_GENERIC_UDelay(100000);
+		AS3935_mode = 0;
+		n = abs(AS3935_freq - 3125);
+		if (m > n) {
+			r = i;
+		} else {
+			break;
+		}
+		m = n;
+	}
+	AIR_GPIO_UnregisterInterrupt(AS3935_IRQ_PIN);
+	
+	AS3935_WriteReg(AS3935_DISP_IRQ_REG_ADDR, r);
 }
 
 /**
@@ -109,16 +163,16 @@ void AS3935_SetAnalogFrontEnd(uint8_t mode)
 {
 	uint8_t newAFESetting;
 	uint8_t currentAFESetting = AS3935_ReadReg(AS3935_PWD_AFEGB_REG_ADDR);
-	currentAFESetting = currentAFESetting & AFE_MASK;
-	if (mode == AFE_OUTDOOR)
+	currentAFESetting = currentAFESetting & AS3935_AFE_MASK;
+	if (mode == AS3935_AFE_OUTDOOR)
 	{
-	newAFESetting = currentAFESetting & AFE_OUTDOOR;
+	newAFESetting = currentAFESetting & AS3935_AFE_OUTDOOR;
 		AS3935_WriteReg(AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
 	}
 
-	if (mode == AFE_INDOOR)
+	if (mode == AS3935_AFE_INDOOR)
 	{
-	newAFESetting = currentAFESetting & AFE_OUTDOOR;
+	newAFESetting = currentAFESetting & AS3935_AFE_OUTDOOR;
 		AS3935_WriteReg(AS3935_PWD_AFEGB_REG_ADDR, newAFESetting);
 	}
 }
@@ -128,7 +182,7 @@ void AS3935_SetAnalogFrontEnd(uint8_t mode)
  */
 uint8_t AS3935_GetAnalogFrontEnd()
 {
-	return ((uint8_t)AS3935_ReadReg(AS3935_PWD_AFEGB_REG_ADDR) & AFE_MASK_2) >> 1;
+	return ((uint8_t)AS3935_ReadReg(AS3935_PWD_AFEGB_REG_ADDR) & AS3935_AFE_MASK_2) >> 1;
 }
 
 /**

@@ -39,8 +39,25 @@
 				"name":"I2C Address (7 bit)",
 				"input":"Combo",
 				"prefix":"#define AS3935_I2C_ADDRESS ",
-				"options": ["0x03"],
+				"options": ["0x03", "0x02", "0x01", "0x00"],
 				"value":"0x03",
+				"regex":"^[a-zA-Z0-9_.]*$"
+			},
+			
+			"irq_pin":{
+				"name":"IRQ Pin",
+				"input":"TextField",
+				"prefix":"#define AS3935_IRQ_PIN ",
+				"value":"D3",
+				"regex":"^[0-9]*$|^D[0-9]*$|^A[0-9]*$"
+			},
+			
+			"analog_front_end":{
+				"name":"Analog Front End",
+				"input":"Combo",
+				"prefix":"#define AIR_AS3935_ANALOG_FRONT_END AS3935_AFE_",
+				"options": ["INDOOR", "OUTDOOR"],
+				"value":"INDOOR",
 				"regex":"^[a-zA-Z0-9_.]*$"
 			}
 		}

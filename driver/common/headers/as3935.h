@@ -28,7 +28,6 @@
 #ifndef AS3935_H
 #define AS3935_H
 
-#include "../i2c/i2c.h"
 #include "as3935_config.h"
 #include <stdint.h>
 
@@ -123,13 +122,13 @@
  * MASKS and other values. Analog Front End operating modes are defined here.
  *
  */
-#define AFE_MASK	 0b11000001
-#define AFE_MASK_2	 0x3E
-#define AFE_OUTDOOR	 0b00100100
-#define AFE_INDOOR	 0b00011100
-#define DISTEST_MASK 0x3F
-#define INTRPT_MASK	0b11110000
-#define INTRPT_RESET 0b0000
+#define AS3935_AFE_MASK	 0b11000001
+#define AS3935_AFE_MASK_2	 0x3E
+#define AS3935_AFE_OUTDOOR	 0b00100100
+#define AS3935_AFE_INDOOR	 0b00011100
+#define AS3935_DISTEST_MASK 0x3F
+#define AS3935_INTRPT_MASK	0b11110000
+#define AS3935_INTRPT_RESET 0b0000
 
 
 /**
@@ -161,10 +160,14 @@ enum eAS3935Mode
 };
 
 /**
+Initilizes the sensor.
+*/
+void AS3935_Init();
+
+/**
 Write a 8-bit value to a device register.	This function does not do any
 form of error checking, so trying to write to one of the read-only registers may
 result in undesirable behavior.
-@param id device ID (0 to 7) on i2c bus
 @param addr device register address
 @param data data to be written to the specified register address
 */
@@ -172,7 +175,6 @@ void AS3935_WriteReg(uint8_t addr, uint8_t data);
 //MAY HAVE TO CHANGE BACK DATA TO UINT16_T
 /**
 Read a 8-bit value from a device register.
-@param id device ID (0 to 7) on i2c bus
 @param addr device register address
 @return data read from the specified register address
 */
@@ -182,19 +184,18 @@ uint8_t AS3935_ReadReg(uint8_t addr);
  * Get the estimated distance to the lightning storm in kilometers.
  * Values beyond 40 are out of range.
  * Values less than 5 mean that the storm is overhead
- * @param id device ID (0 to 7) on i2c bus
 */
 uint8_t AS3935_GetDistanceEstimation();
 
 /**
  * Calibrate the RC Oscillators automatically.
- * @param id device ID (0 to 7) on i2c bus
  */
 void AS3935_CalibrateRCO();
 
+void AS3935_CalibrateLCO();
+
 /**
  * Sets all registers to default mode.
- * @param id device ID (0 to 7) on i2c bus
  */
 void AS3935_PresetRegisterDefaults();
 
@@ -208,44 +209,37 @@ void AS3935_SetAnalogFrontEnd(uint8_t mode);
 
 /**
  * Retrieve the current operating mode of the AFE and watchdog.
- * @param id device ID (0 to 7) on i2c bus
  */
 uint8_t AS3935_GetAnalogFrontEnd();
 
 /**
  * Disable the disturber detection feature on the AS3935.
- * @param id device ID (0 to 7) on i2c bus
  */
 void AS3935_DisableDisturbers();
 
 /**
  * Enable the disturber detection feature on the AS3935.
- * @param id device ID (0 to 7) on i2c bus
  */
 void AS3935_EnableDisturbers();
 
 /**
  * Get the defined minimum number of lightning events in the last 17 minutes that issue a lightning interrupt.
- * @param id device ID (0 to 7) on i2c bus
  */
 uint8_t AS3935_GetMinimumLightnings();
 
 /**
  * Set the defined minimum number of lightning events in the last 17 minutes that issue a lightning interrupt.
- * @param id device ID (0 to 7) on i2c bus
  * @param minimumLightning (1 to 16)
  */
 uint8_t AS3935_SetMinimumLightnings(uint8_t minimumLightning);
 
 /**
  * Get the defined threshold for the noise floor that triggers an interrupt.
- * @param id device ID (0 to 7) on i2c bus
  */
 uint8_t AS3935_GetNoiseFloor();
 
 /**
  * Set the defined threshold for the noise floor that triggers an interrupt.
- * @param id device ID (0 to 7) on i2c bus
  * @param noiseFloor (0b000 to 0b111)
  */
 uint8_t AS3935_SetNoiseFloor(int noiseFloor);
@@ -253,13 +247,11 @@ uint8_t AS3935_SetNoiseFloor(int noiseFloor);
 /**
  * Read the current state of the interrupt register.
  * Issue a 2 millisecond delay per the datasheet recommendations.
- * @param id device ID (0 to 7) on i2c bus
  */
 uint8_t AS3935_ReadInterruptRegister();
 
 /**
 * Reset the interrupt register.
-* @param id device ID (0 to 7) on i2c bus
 */
 void AS3935_ResetInterruptRegister();
 
