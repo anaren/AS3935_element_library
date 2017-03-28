@@ -21,6 +21,8 @@ if os.path.isdir(driver_path):
         
     except:
         print('No JSON descriptor for %s!' % driver_name)
+        e = sys.exc_info()[0]
+        print(e);
         exit()
     
     try:
